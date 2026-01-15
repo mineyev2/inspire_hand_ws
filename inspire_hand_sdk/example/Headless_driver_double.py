@@ -18,18 +18,17 @@ def worker(ip,LR,name,network=None):
             if call_count % 10 == 0:
                 elapsed_time = time.perf_counter() - start_time
                 frequency = call_count / elapsed_time
-                print(f"{name} 当前频率: {frequency:.2f} Hz, 调用次数: {call_count}, 耗时: {elapsed_time:.6f} 秒")
+                print(f"{name} Current frequency: {frequency:.2f} Hz, calls: {call_count}, elapsed time: {elapsed_time:.6f} seconds")
     except KeyboardInterrupt:
         elapsed_time = time.perf_counter() - start_time
         frequency = call_count / elapsed_time if elapsed_time > 0 else 0
-        print(f"{name} 程序结束. 总调用次数: {call_count}, 总耗时: {elapsed_time:.6f} 秒, 最终频率: {frequency:.2f} Hz")
+        print(f"{name} Program ended. Total calls: {call_count}, total time: {elapsed_time:.6f} seconds, final frequency: {frequency:.2f} Hz")
 
 if __name__ == "__main__":
-    # 使用默认IP地址的示例
+    # Example using default IP addresses
 
-    process_r = multiprocessing.Process(target=worker, args=('192.168.123.211','r',"右手进程"))
-    process_l = multiprocessing.Process(target=worker, args=('192.168.123.210','l',"左手进程"))
-
+    process_r = multiprocessing.Process(target=worker, args=('192.168.123.211','r',"Right hand process"))
+    process_l = multiprocessing.Process(target=worker, args=('192.168.123.210','l',"Left hand process"))
     process_r.start()
     time.sleep(0.6)
     process_l.start()
