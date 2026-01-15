@@ -104,3 +104,41 @@ Below are instructions for using common examples:
     ```
 
 ---
+
+
+
+
+# What Roman did
+
+# Installation
+
+0. Create venv
+
+1. Clone repo:
+    ```bash
+    git clone git@github.com:mineyev2/inspire_hand_ws.git
+    ```
+2. Initialize and update submodules:
+
+    ```bash
+    cd ./inspire_hand_ws
+    git submodule init  # Initialize submodules
+    git submodule update  # Update submodules to the latest version
+    ```
+
+3. Install dependencies (from Roman's code)
+```
+pip install -r requirements_roman.txt
+```
+
+NOTE: requirements.txt also exists, I didn't load it for now. It doesn't seem necessary for the hands.
+
+4. Install the two SDKs:
+
+    ```bash
+    cd unitree_sdk2_python
+    pip install -e .
+
+    cd ../inspire_hand_sdk
+    pip install -e .
+    ```

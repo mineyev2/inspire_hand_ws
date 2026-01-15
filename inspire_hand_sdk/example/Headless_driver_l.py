@@ -11,22 +11,22 @@ if __name__ == "__main__":
     handler=inspire_sdk.ModbusDataHandler(ip='192.168.123.211',LR='l',device_id=1)
     time.sleep(0.5)
 
-    call_count = 0  # 记录调用次数
-    start_time = time.perf_counter()  # 记录开始时间
+    call_count = 0  # Record call count
+    start_time = time.perf_counter()  # Record start time
 
     try:
         while True:
-            data_dict = handler.read()  # 读取数据
+            data_dict = handler.read()  # Read data
 
-            call_count += 1  # 增加调用计数
-            time.sleep(0.001)  # 暂停 5 毫秒
+            call_count += 1  # Increment call count
+            time.sleep(0.001)  # Pause 1 millisecond
 
-            # 每秒计算并打印一次调用频率
-            if call_count % 10 == 0:  # 每 200 次调用计算一次频率
-                elapsed_time = time.perf_counter() - start_time  # 计算总耗时
-                frequency = call_count / elapsed_time  # 计算频率 (Hz)
-                print(f"当前频率: {frequency:.2f} Hz, 调用次数: {call_count}, 耗时: {elapsed_time:.6f} 秒")
+            # Calculate and print call frequency
+            if call_count % 10 == 0:  # Calculate frequency every 10 calls
+                elapsed_time = time.perf_counter() - start_time  # Calculate total elapsed time
+                frequency = call_count / elapsed_time  # Calculate frequency (Hz)
+                print(f"Current frequency: {frequency:.2f} Hz, calls: {call_count}, elapsed time: {elapsed_time:.6f} seconds")
     except KeyboardInterrupt:
-        elapsed_time = time.perf_counter() - start_time  # 计算总耗时
-        frequency = call_count / elapsed_time if elapsed_time > 0 else 0  # 计算最终频率
-        print(f"程序结束. 总调用次数: {call_count}, 总耗时: {elapsed_time:.6f} 秒, 最终频率: {frequency:.2f} Hz")
+        elapsed_time = time.perf_counter() - start_time  # Calculate total elapsed time
+        frequency = call_count / elapsed_time if elapsed_time > 0 else 0  # Calculate final frequency
+        print(f"Program ended. Total calls: {call_count}, total time: {elapsed_time:.6f} seconds, final frequency: {frequency:.2f} Hz")

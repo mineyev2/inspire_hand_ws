@@ -1,27 +1,27 @@
-# 灵巧手SDK介绍
+# Dexterous Hand SDK Introduction
 
-H1可搭载 [Inspire Robotics](https://inspire-robots.com/product/frwz/) 的仿人五指灵巧手，该灵巧手具有6个自由度和12个运动关节，并继承了17个触觉传感器，可以模拟人手实现复杂动作。
+The H1 can be equipped with [Inspire Robotics](https://inspire-robots.com/product/frwz/)' humanoid five-finger dexterous hand. This dexterous hand has 6 degrees of freedom and 12 motion joints, and integrates 17 tactile sensors, which can simulate human hands to achieve complex movements.
 
-## 控制方式
+## Control Methods
 
-因时机械手官方提供485串口的ModBusRTU和ModbusTCP两种通信方式。本SDK使用ModbusTCP与灵巧手进行通信，将数据与控制指令转发为DDS形式。
+Inspire officially provides two communication methods: ModBusRTU via 485 serial port and ModbusTCP. This SDK uses ModbusTCP to communicate with the dexterous hand, forwarding data and control commands in DDS format.
 
-H1提供一个USB转串口模块，用户可以将该USB插在H1开发计算单元(PC2, PC3)上进行485通讯控制灵巧手，此时端口通常为/dev/ttyUSB0，该模式下，可使用老版本SDK进行通信，但不支持触觉传感器数据获取，该版本SDK不支持485串口通信。
+The H1 provides a USB-to-serial module. Users can plug this USB into the H1 development computing unit (PC2, PC3) to control the dexterous hand via 485 communication. In this case, the port is usually /dev/ttyUSB0. In this mode, the old version SDK can be used for communication, but tactile sensor data acquisition is not supported. This version SDK does not support 485 serial communication.
 
-1. 使用因时官方SDK控制
+1. Control using Inspire's official SDK
 
-用户可以根据因时灵巧手官方通讯协议自行编写程序控制灵巧手。
+Users can write their own programs to control the dexterous hand according to Inspire's official communication protocol.
 
-2. 使用宇树灵巧手SDK控制
+2. Control using Unitree's dexterous hand SDK
 
-H1通信建立在DDS框架之上。为便于使用unitree_sdk2进行控制灵巧手。宇树提供将ModbusTCP收发的数据转为DDS消息的示例程序(下载链接见文档底部)。
+H1 communication is built on the DDS framework. To facilitate controlling the dexterous hand using unitree_sdk2, Unitree provides sample programs that convert ModbusTCP data to DDS messages (download link at the bottom of the document).
 
-## 宇树SDK接口说明
+## Unitree SDK Interface Description
 
-用户向 `"rt/inspire_hand/ctrl/*"` 话题发送 `"inspire::inspire_hand_ctrl"` 消息控制灵巧手。
-从 `"rt/inspire_hand/state/*"` 话题接受 `"inspire::inspire_hand_state"` 消息获取灵巧手状态。
-从 `"rt/inspire_hand/touch/*"` 话题接受 `"inspire::inspire_hand_touch"` 消息获取触觉传感器数据。
-其中`*`为话题后缀，默认为`r`，表示右手。
+Users send `"inspire::inspire_hand_ctrl"` messages to the `"rt/inspire_hand/ctrl/*"` topic to control the dexterous hand.
+Receive `"inspire::inspire_hand_state"` messages from the `"rt/inspire_hand/state/*"` topic to get dexterous hand state.
+Receive `"inspire::inspire_hand_touch"` messages from the `"rt/inspire_hand/touch/*"` topic to get tactile sensor data.
+Where `*` is the topic suffix, default is `r`, indicating right hand.
 
 ```mermaid
 graph LR
@@ -31,11 +31,11 @@ B --rt/inspire_hand/touch/*--> A
 
 ```
 
-## IDL数据格式
+## IDL Data Format
 
-采用数组格式的电机数据，内部包含双手12个电机数据。具体MotorCmd_.idl和MotorState_.idl的格式见 [底层服务接口](https://support.unitree.com/home/zh/H1_developer/Basic_Services_Interface)
+Motor data in array format is used, containing data for 12 motors of both hands internally. For the specific format of MotorCmd_.idl and MotorState_.idl, see [Basic Services Interface](https://support.unitree.com/home/zh/H1_developer/Basic_Services_Interface)
 
-灵巧手数据格式基本同因时官方说明文档相同，详情查看`inspire_hand_sdk/hand_idl`中`.idl`文件。
+The dexterous hand data format is basically the same as Inspire's official documentation. For details, check the `.idl` files in `inspire_hand_sdk/hand_idl`.
 
 ```cpp
 //inspire_hand_ctrl.idl
@@ -72,23 +72,23 @@ module inspire
 {
     struct inspire_hand_touch
     {
-        sequence<int16,9>   fingerone_tip_touch;      // 小拇指指端触觉数据
-        sequence<int16,96>  fingerone_top_touch;      // 小拇指指尖触觉数据
-        sequence<int16,80>  fingerone_palm_touch;     // 小拇指指腹触觉数据
-        sequence<int16,9>   fingertwo_tip_touch;      // 无名指指端触觉数据
-        sequence<int16,96>  fingertwo_top_touch;      // 无名指指尖触觉数据
-        sequence<int16,80>  fingertwo_palm_touch;     // 无名指指腹触觉数据
-        sequence<int16,9>   fingerthree_tip_touch;    // 中指指端触觉数据
-        sequence<int16,96>  fingerthree_top_touch;    // 中指指尖触觉数据
-        sequence<int16,80>  fingerthree_palm_touch;   // 中指指腹触觉数据
-        sequence<int16,9>   fingerfour_tip_touch;     // 食指指端触觉数据
-        sequence<int16,96>  fingerfour_top_touch;     // 食指指尖触觉数据
-        sequence<int16,80>  fingerfour_palm_touch;    // 食指指腹触觉数据
-        sequence<int16,9>   fingerfive_tip_touch;     // 大拇指指端触觉数据
-        sequence<int16,96>  fingerfive_top_touch;     // 大拇指尖触觉数据
-        sequence<int16,9>   fingerfive_middle_touch;  // 大拇指指中触觉数据
-        sequence<int16,96>  fingerfive_palm_touch;    // 大拇指指腹触觉数据
-        sequence<int16,112> palm_touch;                // 掌心触觉数据
+        sequence<int16,9>   fingerone_tip_touch;      // Pinky fingertip tactile data
+        sequence<int16,96>  fingerone_top_touch;      // Pinky finger top tactile data
+        sequence<int16,80>  fingerone_palm_touch;     // Pinky finger pad tactile data
+        sequence<int16,9>   fingertwo_tip_touch;      // Ring fingertip tactile data
+        sequence<int16,96>  fingertwo_top_touch;      // Ring finger top tactile data
+        sequence<int16,80>  fingertwo_palm_touch;     // Ring finger pad tactile data
+        sequence<int16,9>   fingerthree_tip_touch;    // Middle fingertip tactile data
+        sequence<int16,96>  fingerthree_top_touch;    // Middle finger top tactile data
+        sequence<int16,80>  fingerthree_palm_touch;   // Middle finger pad tactile data
+        sequence<int16,9>   fingerfour_tip_touch;     // Index fingertip tactile data
+        sequence<int16,96>  fingerfour_top_touch;     // Index finger top tactile data
+        sequence<int16,80>  fingerfour_palm_touch;    // Index finger pad tactile data
+        sequence<int16,9>   fingerfive_tip_touch;     // Thumb fingertip tactile data
+        sequence<int16,96>  fingerfive_top_touch;     // Thumb top tactile data
+        sequence<int16,9>   fingerfive_middle_touch;  // Thumb middle tactile data
+        sequence<int16,96>  fingerfive_palm_touch;    // Thumb pad tactile data
+        sequence<int16,112> palm_touch;                // Palm tactile data
     };
 
 };
@@ -96,26 +96,26 @@ module inspire
 ```
 
 !!! note
-    控制消息增加了模式选项，控制指令的组合模式按二进制方式实现，从而实现制定指令
-    mode 0：0000（无操作）
-    mode 1：0001（角度）
-    mode 2：0010（位置）
-    mode 3：0011（角度 + 位置）
-    mode 4：0100（力控）
-    mode 5：0101（角度 + 力控）
-    mode 6：0110（位置 + 力控）
-    mode 7：0111（角度 + 位置 + 力控）
-    mode 8：1000（速度）
-    mode 9：1001（角度 + 速度）
-    mode 10：1010（位置 + 速度）
-    mode 11：1011（角度 + 位置 + 速度）
-    mode 12：1100（力控 + 速度）
-    mode 13：1101（角度 + 力控 + 速度）
-    mode 14：1110（位置 + 力控 + 速度）
-    mode 15：1111（角度 + 位置 + 力控 + 速度）  
+    The control message adds mode options. The combination mode of control commands is implemented in binary form to achieve specified commands.
+    mode 0: 0000 (No operation)
+    mode 1: 0001 (Angle)
+    mode 2: 0010 (Position)
+    mode 3: 0011 (Angle + Position)
+    mode 4: 0100 (Force control)
+    mode 5: 0101 (Angle + Force control)
+    mode 6: 0110 (Position + Force control)
+    mode 7: 0111 (Angle + Position + Force control)
+    mode 8: 1000 (Speed)
+    mode 9: 1001 (Angle + Speed)
+    mode 10: 1010 (Position + Speed)
+    mode 11: 1011 (Angle + Position + Speed)
+    mode 12: 1100 (Force control + Speed)
+    mode 13: 1101 (Angle + Force control + Speed)
+    mode 14: 1110 (Position + Force control + Speed)
+    mode 15: 1111 (Angle + Position + Force control + Speed)  
 !!!
 
-+ IDL中的关节顺序
++ Joint order in IDL
 
 <div style="text-align: center;">
 <table border="1">
@@ -145,40 +145,40 @@ module inspire
 ---
 
 # 
-# SDK安装使用
-该SDK主要使用python实现，运行依赖于[`unitree_sdk2_python`](https://github.com/unitreerobotics/unitree_sdk2_python),同时利用pyqt5,pyqtgraph进行可视化。
+# SDK Installation and Usage
+This SDK is mainly implemented in Python, and its operation depends on [`unitree_sdk2_python`](https://github.com/unitreerobotics/unitree_sdk2_python), while using pyqt5 and pyqtgraph for visualization.
 
-首先 git clone SDK工作目录：
+First, git clone the SDK working directory:
 
 ```bash
 git clone https://github.com/NaCl-1374/inspire_hand_ws.git
 ```
 
-建议使用 `venv` 进行虚拟环境管理：
+It is recommended to use `venv` for virtual environment management:
 
 ```bash
 python -m venv venv
 source venv/bin/activate  # Linux/MacOS
-# 或
+# or
 venv\Scripts\activate  # Windows
 ```
 
-## 安装依赖
+## Install Dependencies
 
-1. 安装项目依赖：
+1. Install project dependencies:
 
     ```bash
     pip install -r requirements.txt
     ```
 
-2. 更新子模块：
+2. Update submodules:
 
     ```bash
-    git submodule init  # 初始化子模块
-    git submodule update  # 更新子模块到最新版本
+    git submodule init  # Initialize submodules
+    git submodule update  # Update submodules to latest version
     ```
 
-3. 分别安装两个SDK：
+3. Install both SDKs separately:
 
     ```bash
     cd unitree_sdk2_python
@@ -187,18 +187,18 @@ venv\Scripts\activate  # Windows
     cd ../inspire_hand_sdk
     pip install -e .
     ```
-## 使用
+## Usage
 
-## 灵巧手与环境配置
+## Dexterous Hand and Environment Configuration
 
-首先，对设备进行网络配置，灵巧手默认ip为：`192.168.11.210`,设备网段需要与灵巧手处于同一网段。配置完成后执行`ping 192.168.11.210`,检查通信是否正常。
+First, configure the network for the device. The dexterous hand default IP is: `192.168.11.210`. The device network segment needs to be in the same network segment as the dexterous hand. After configuration, execute `ping 192.168.11.210` to check if communication is normal.
 
-若需要调整灵巧手IP及其他参数，可以执行下面使用示例中 **灵巧手配置面板** ，启动面板进行配置。
-面板启动后会自动读取当前网络下设备的信息。修改面板上的参数后，需要点击`写入设置`将参数发送到灵巧手，此时参数并不会生效，若要生效，需要点击`保存设置`并重启设置。
+If you need to adjust the dexterous hand IP and other parameters, you can execute the **Dexterous Hand Configuration Panel** in the usage examples below to start the panel for configuration.
+After the panel starts, it will automatically read the device information on the current network. After modifying parameters on the panel, you need to click `Write Settings` to send the parameters to the dexterous hand. At this time, the parameters will not take effect. To make them effective, you need to click `Save Settings` and restart the settings.
 
 !!!note
 
-    若修改IP，则需要对相关文件中存在的以下代码进行修改，修改其ip选项为修改后的ip。
+    If you modify the IP, you need to modify the following code in related files, changing the ip option to the modified IP.
 
     ``` python
         # inspire_hand_sdk/example/Vision_driver.py and inspire_hand_sdk/example/Headless_driver.py
@@ -207,7 +207,7 @@ venv\Scripts\activate  # Windows
         # inspire_hand_sdk/example/init_set_inspire_hand.py
         window = MainWindow(ip=defaut_ip)
     ```
-    其中的`LR`选项，为DDS消息后缀`*`的参数，可以根据设备进行定义。
+    The `LR` option is the parameter for the DDS message suffix `*`, which can be defined according to the device.
 !!!
 
 
