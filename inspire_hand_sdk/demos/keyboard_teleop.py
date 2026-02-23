@@ -50,7 +50,7 @@ MAX_ANGLE = 1000
 ANGLE_STEP = 20  # Amount to change angle per loop iteration (approx 50Hz)
 
 class KeyboardController:
-    def __init__(self):
+    def __init__(self, use_left_hand=True, use_right_hand=True):
         # Initialize DDS (only once for the process)
         if len(sys.argv) > 1:
             ChannelFactoryInitialize(0, sys.argv[1])
@@ -149,5 +149,5 @@ class KeyboardController:
             termios.tcsetattr(sys.stdin, termios.TCSADRAIN, self.settings)
 
 if __name__ == "__main__":
-    controller = KeyboardController()
+    controller = KeyboardController(use_left_hand=True, use_right_hand=True)
     controller.run()

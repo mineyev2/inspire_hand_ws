@@ -36,3 +36,7 @@ __pycache__
 # JetBrains IDE
 .idea/
 
+# Python virtual environments
+venv/
+env/
+

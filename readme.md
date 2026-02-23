@@ -3,17 +3,15 @@
 
 # Inspire Hand SDK Usage Guide
 
+## Setting up connection with Unitree
+Refer to this page and go to "Modifying Network Configuration" section: [https://support.unitree.com/home/en/G1_developer/quick_development](https://support.unitree.com/home/en/G1_developer/quick_development)
+
 ## Virtual Environment Management
 
 It is recommended to use `venv` for managing the virtual environment:
 
 ```bash
-python -m venv venv  # or  Unzip venv_x86.tar.xz, and place the.venv in inspire_hand_ws/.venv
-
-# Then execute the script to modify venv:
-python update_venv_path.py.venv
-python update_bin_files.py.venv 
-
+python3 -m venv venv
 source venv/bin/activate  # Activate the virtual environment for Linux/MacOS
 
 ```
@@ -104,41 +102,3 @@ Below are instructions for using common examples:
     ```
 
 ---
-
-
-
-
-# What Roman did
-
-# Installation
-
-0. Create venv
-
-1. Clone repo:
-    ```bash
-    git clone git@github.com:mineyev2/inspire_hand_ws.git
-    ```
-2. Initialize and update submodules:
-
-    ```bash
-    cd ./inspire_hand_ws
-    git submodule init  # Initialize submodules
-    git submodule update  # Update submodules to the latest version
-    ```
-
-3. Install dependencies (from Roman's code)
-```
-pip install -r requirements_roman.txt
-```
-
-NOTE: requirements.txt also exists, I didn't load it for now. It doesn't seem necessary for the hands.
-
-4. Install the two SDKs:
-
-    ```bash
-    cd unitree_sdk2_python
-    pip install -e .
-
-    cd ../inspire_hand_sdk
-    pip install -e .
-    ```
